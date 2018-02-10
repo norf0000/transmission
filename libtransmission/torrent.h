@@ -240,6 +240,8 @@ struct tr_torrent
     uint16_t idleLimitMinutes;
     tr_idlelimit idleLimitMode;
     bool finishedSeedingByIdle;
+
+    bool isSequentialOrder;
 };
 
 static inline tr_torrent* tr_torrentNext(tr_session* session, tr_torrent* current)

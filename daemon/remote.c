@@ -321,6 +321,8 @@ static tr_option opts[] =
     { 954, "no-global-seedratio", "All torrents, unless overridden by a per-torrent setting, should seed regardless of ratio", "GSR", 0, NULL },
     { 710, "tracker-add", "Add a tracker to a torrent", "td", 1, "<tracker>" },
     { 712, "tracker-remove", "Remove a tracker from a torrent", "tr", 1, "<trackerId>" },
+    { 500, "sequential-order", "Download torrent sequentially", "seq", 0, NULL },
+    { 501, "random-order", "Download torrent randomly", "rnd", 0, NULL },
     { 's', "start", "Start the current torrent(s)", "s", 0, NULL },
     { 'S', "stop", "Stop the current torrent(s)", "S", 0, NULL },
     { 't', "torrent", "Set the current torrent(s)", "t", 1, "<torrent>" },
@@ -435,6 +437,8 @@ static int getOptMode(int val)
     case 991: /* no-start-paused */
     case 992: /* trash-torrent */
     case 993: /* no-trash-torrent */
+    case 500: /* sequential-order */
+    case 501: /* random-order */
         return MODE_SESSION_SET;
 
     case 712: /* tracker-remove */
@@ -702,6 +706,7 @@ static tr_quark const details_keys[] =
     TR_KEY_id,
     TR_KEY_isFinished,
     TR_KEY_isPrivate,
+    TR_KEY_isSequentialOrder,
     TR_KEY_leftUntilDone,
     TR_KEY_magnetLink,
     TR_KEY_name,
@@ -736,6 +741,7 @@ static tr_quark const list_keys[] =
     TR_KEY_eta,
     TR_KEY_id,
     TR_KEY_isFinished,
+    TR_KEY_isSequentialOrder,
     TR_KEY_leftUntilDone,
     TR_KEY_name,
     TR_KEY_peersGettingFromUs,
@@ -2637,6 +2643,12 @@ static int processArgs(char const* rpcurl, int argc, char const* const* argv)
 
             case 985:
                 tr_variantDictAddBool(args, TR_KEY_honorsSessionLimits, false);
+                break;
+
+            case 500: tr_variantDictAddBool (args, TR_KEY_isSequentialOrder, true);
+                break;
+
+            case 501: tr_variantDictAddBool (args, TR_KEY_isSequentialOrder, false);
                 break;
 
             default:

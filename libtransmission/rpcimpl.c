@@ -628,6 +628,10 @@ static void addField(tr_torrent* const tor, tr_info const* const inf, tr_stat co
         tr_variantDictAddBool(d, key, tr_torrentIsPrivate(tor));
         break;
 
+    case TR_KEY_isSequentialOrder:
+        tr_variantDictAddBool (d, key, st->isSequentialOrder);
+        break;
+
     case TR_KEY_isStalled:
         tr_variantDictAddBool(d, key, st->isStalled);
         break;

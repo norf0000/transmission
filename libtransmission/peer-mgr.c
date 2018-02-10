@@ -1022,7 +1022,7 @@ static void pieceListSort(tr_swarm* s, enum piece_sort_state state)
 
 static void assertWeightedPiecesAreSorted(Torrent* t)
 {
-    if (t->endgame == 0)
+    if (t->endgame == 0  && t->tor->isSequentialOrder == 0)
     {
         setComparePieceByWeightTorrent(t);
 
@@ -1178,6 +1178,11 @@ static void pieceListResortPiece(tr_swarm* s, struct weighted_piece* p)
     bool isSorted = true;
 
     if (p == NULL)
+    {
+        return;
+    }
+    
+    if (s->tor->isSequentialOrder)
     {
         return;
     }
@@ -1356,9 +1361,19 @@ void tr_peerMgrGetNextRequests(tr_torrent* tor, tr_peer* peer, int numwant, tr_b
         pieceListRebuild(s);
     }
 
-    if (s->pieceSortState != PIECES_SORTED_BY_WEIGHT)
+    // TODO: replace sequentialOrder with sortMode
+    if (tor->isSequentialOrder)
     {
-        pieceListSort(s, PIECES_SORTED_BY_WEIGHT);
+        if (s->pieceSortState != PIECES_SORTED_BY_INDEX)
+            // TODO: check how often it gets here (someone resorts)
+            pieceListSort (s, PIECES_SORTED_BY_INDEX);
+    }
+    else
+    {
+        if (s->pieceSortState != PIECES_SORTED_BY_WEIGHT)
+        {
+            pieceListSort(s, PIECES_SORTED_BY_WEIGHT);
+        }
     }
 
     assertReplicationCountIsExact(s);
@@ -1461,7 +1476,7 @@ void tr_peerMgrGetNextRequests(tr_torrent* tor, tr_peer* peer, int numwant, tr_b
     /* In most cases we've just changed the weights of a small number of pieces.
      * So rather than qsort()ing the entire array, it's faster to apply an
      * adaptive insertion sort algorithm. */
-    if (got > 0)
+    if (tor->isSequentialOrder == 0 && got > 0)
     {
         /* not enough requests || last piece modified */
         if (checkedPieceCount == s->pieceCount)

@@ -160,6 +160,7 @@ static struct tr_key_struct const my_static[] =
     { "isFinished", 10 },
     { "isIncoming", 10 },
     { "isPrivate", 9 },
+    { "isSequentialOrder", 17 },
     { "isStalled", 9 },
     { "isUTP", 5 },
     { "isUploadingTo", 13 },

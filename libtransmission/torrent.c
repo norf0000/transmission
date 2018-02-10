@@ -960,6 +960,8 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     tor->bandwidth.priority = tr_ctorGetBandwidthPriority(ctor);
     tor->error = TR_STAT_OK;
     tor->finishedSeedingByIdle = false;
+    
+    tor->isSequentialOrder = false;
 
     tr_peerMgrAddTorrent(session->peerMgr, tor);
 
@@ -1009,6 +1011,11 @@ static void torrentInit(tr_torrent* tor, tr_ctor const* ctor)
     {
         tr_torrentSetIdleMode(tor, TR_IDLELIMIT_GLOBAL);
         tr_torrentSetIdleLimit(tor, tr_sessionGetIdleLimit(tor->session));
+    }
+    
+    if ((loaded & TR_FR_IS_SEQUENTIAL_ORDER) == 0)
+    {
+        tr_torrentSetSequentialOrder(tor, 0);
     }
 
     /* add the torrent to tr_session.torrentList */
@@ -1417,6 +1424,8 @@ tr_stat const* tr_torrentStat(tr_torrent* tor)
     s->desiredAvailable = tr_peerMgrGetDesiredAvailable(tor);
 
     s->ratio = tr_getRatio(s->uploadedEver, s->downloadedEver ? s->downloadedEver : s->haveValid);
+    
+    s->isSequentialOrder = tor->isSequentialOrder;
 
     seedRatioApplies = tr_torrentGetSeedRatioBytes(tor, &seedRatioBytesLeft, &seedRatioBytesGoal);
 
@@ -3758,6 +3767,13 @@ void tr_torrentSetQueueStartCallback(tr_torrent* torrent, void (* callback)(tr_t
 {
     torrent->queue_started_callback = callback;
     torrent->queue_started_user_data = user_data;
+}
+
+void
+tr_torrentSetSequentialOrder (tr_torrent * tor, bool value)
+{
+    tor->isSequentialOrder = value;
+    tr_torrentSetDirty (tor);
 }
 
 /***

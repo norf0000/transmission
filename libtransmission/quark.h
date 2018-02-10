@@ -162,6 +162,7 @@ enum
     TR_KEY_isFinished,
     TR_KEY_isIncoming,
     TR_KEY_isPrivate,
+    TR_KEY_isSequentialOrder,
     TR_KEY_isStalled,
     TR_KEY_isUTP,
     TR_KEY_isUploadingTo,
