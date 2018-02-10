@@ -93,4 +93,9 @@
     return [[self class] progressGradientForRed: 0.933 green: 0.890 blue: 0.243];
 }
 
++ (NSGradient *) progressOrangeGradient
+{
+    return [[self class] progressGradientForRed: 1 green: 0.269 blue: 0];
+}
+
 @end

@@ -584,6 +584,10 @@
                 [[ProgressGradients progressGreenGradient] drawInRect: ratioHaveRect angle: 90];
                 [[ProgressGradients progressLightGreenGradient] drawInRect: ratioRemainingRect angle: 90];
             }
+            else if ([torrent isSequentialOrder])
+            {
+                [[ProgressGradients progressOrangeGradient] drawInRect: haveRect angle: 90];
+            }
             else
                 [[ProgressGradients progressBlueGradient] drawInRect: haveRect angle: 90];
         }

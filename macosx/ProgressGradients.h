@@ -35,5 +35,6 @@
 + (NSGradient *) progressDarkGreenGradient;
 + (NSGradient *) progressRedGradient;
 + (NSGradient *) progressYellowGradient;
++ (NSGradient *) progressOrangeGradient;
 
 @end
