@@ -34,10 +34,11 @@
 
 - (id) initWithLib: (tr_session *) lib;
 
-- (void) updateBadgeWithDownload: (CGFloat) downloadRate upload: (CGFloat) uploadRate;
+- (void) updateBadgeWithDownload: (CGFloat) downloadRate upload: (CGFloat) uploadRate remainingTime: (NSInteger) remainingTime;
 - (void) addCompletedTorrent: (Torrent *) torrent;
 - (void) removeTorrent: (Torrent *) torrent;
 - (void) clearCompleted;
 - (void) setQuitting;
+- (void) updateBadgeWithRemainingTime: (NSArray*) torrents;
 
 @end

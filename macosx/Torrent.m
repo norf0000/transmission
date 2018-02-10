@@ -1218,6 +1218,11 @@ bool trashDataFile(const char * filename, tr_error ** error)
         return [self shortStatusString];
 }
 
+- (NSInteger) eta
+{
+    return fStat->eta;
+}
+
 - (NSString *) stateString
 {
     switch (fStat->activity)

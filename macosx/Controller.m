@@ -1842,6 +1842,7 @@ static void removeKeRangerRansomware()
 {
     CGFloat dlRate = 0.0, ulRate = 0.0;
     BOOL anyCompleted = NO;
+    NSInteger maxEta = TR_ETA_UNKNOWN;
     for (Torrent * torrent in fTorrents)
     {
         [torrent update];
@@ -1851,6 +1852,10 @@ static void removeKeRangerRansomware()
         ulRate += [torrent uploadRate];
 
         anyCompleted |= [torrent isFinishedSeeding];
+        
+        if (maxEta < [torrent eta]) {
+            maxEta = [torrent eta];
+        }
     }
 
     if (![NSApp isHidden])
@@ -1870,7 +1875,17 @@ static void removeKeRangerRansomware()
     }
 
     //badge dock
-    [fBadger updateBadgeWithDownload: dlRate upload: ulRate];
+    // ETA only for selected torrents
+    if ([[fTableView selectedTorrents] count] > 0) {
+        maxEta = TR_ETA_UNKNOWN;
+        for (Torrent * torrent in [fTableView selectedTorrents])
+        {
+            if (maxEta < [torrent eta])
+                maxEta = [torrent eta];
+        }
+    }
+    
+    [fBadger updateBadgeWithDownload: dlRate upload: ulRate remainingTime: maxEta];
 }
 
 #warning can this be removed or refined?

@@ -31,11 +31,15 @@
 
     CGFloat fDownloadRate, fUploadRate;
     BOOL fQuitting;
+    
+    NSInteger remainingTime;
 }
 
 - (id) initWithLib: (tr_session *) lib;
 
 - (BOOL) setRatesWithDownload: (CGFloat) downloadRate upload: (CGFloat) uploadRate;
 - (void) setQuitting;
+
+- (BOOL) setRemainingTime: (NSInteger) time;
 
 @end

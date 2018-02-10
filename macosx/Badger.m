@@ -43,7 +43,7 @@
 }
 
 
-- (void) updateBadgeWithDownload: (CGFloat) downloadRate upload: (CGFloat) uploadRate
+- (void) updateBadgeWithDownload: (CGFloat) downloadRate upload: (CGFloat) uploadRate remainingTime: (NSInteger) remainingTime
 {
     const CGFloat displayDlRate = [[NSUserDefaults standardUserDefaults] boolForKey: @"BadgeDownloadRate"]
                                     ? downloadRate : 0.0;
@@ -51,7 +51,7 @@
                                     ? uploadRate : 0.0;
 
     //only update if the badged values change
-    if ([(BadgeView *)[[NSApp dockTile] contentView] setRatesWithDownload: displayDlRate upload: displayUlRate])
+    if ([(BadgeView *)[[NSApp dockTile] contentView] setRatesWithDownload: displayDlRate upload: displayUlRate] | [(BadgeView *)[[NSApp dockTile] contentView] setRemainingTime: remainingTime])
         [[NSApp dockTile] display];
 }
 

@@ -192,6 +192,7 @@ typedef enum {
 - (NSString *) statusString;
 - (NSString *) shortStatusString;
 - (NSString *) remainingTimeString;
+- (NSInteger) eta;
 
 - (NSString *) stateString;
 - (NSInteger) totalPeersConnected;

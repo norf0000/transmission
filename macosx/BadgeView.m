@@ -22,6 +22,7 @@
 
 #import "BadgeView.h"
 #import "NSStringAdditions.h"
+#import "NSApplicationAdditions.h"
 
 #define BETWEEN_PADDING 2.0
 
@@ -42,6 +43,7 @@
         fDownloadRate = 0.0;
         fUploadRate = 0.0;
         fQuitting = NO;
+        remainingTime = -1;
     }
     return self;
 }
@@ -63,6 +65,37 @@
     fQuitting = YES;
 }
 
+- (BOOL) setRemainingTime: (NSInteger) time
+{
+    if (remainingTime == time)
+        return NO;
+    
+    remainingTime = time;
+    return YES;
+}
+
+- (NSString*) secondsToTimeString: (NSInteger) seconds
+{
+    NSString * idleString = @"";
+    
+    if ([NSApp isOnYosemiteOrBetter]) {
+        static NSDateComponentsFormatter *formatter;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            formatter = [NSDateComponentsFormatter new];
+            formatter.unitsStyle = NSDateComponentsFormatterUnitsStyleAbbreviated;
+            formatter.maximumUnitCount = 2;
+            formatter.collapsesLargestUnit = YES;
+        });
+        
+        idleString = [formatter stringFromTimeInterval: seconds];
+    } else {
+        idleString = [NSString timeString: remainingTime includesTimeRemainingPhrase: NO showSeconds: YES maxFields: 2];
+    }
+    
+    return idleString;
+}
+
 - (void) drawRect: (NSRect) rect
 {
     [[NSApp applicationIconImage] drawInRect: rect fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
@@ -76,7 +109,9 @@
     }
 
     const BOOL upload = fUploadRate >= 0.1,
-            download = fDownloadRate >= 0.1;
+            download = fDownloadRate >= 0.1,
+            eta = remainingTime != TR_ETA_NOT_AVAIL && remainingTime != TR_ETA_UNKNOWN;
+
     CGFloat bottom = 0.0;
     if (upload)
     {
@@ -86,8 +121,16 @@
             bottom += [uploadBadge size].height + BETWEEN_PADDING; //download rate above upload rate
     }
     if (download)
-        [self badge: [NSImage imageNamed: @"DownloadBadge"] string: [NSString stringForSpeedAbbrev: fDownloadRate]
-                atHeight: bottom adjustForQuit: NO];
+    {
+        NSImage * downloadBadge = [NSImage imageNamed: @"DownloadBadge"];
+        [self badge: downloadBadge string: [NSString stringForSpeedAbbrev: fDownloadRate]
+           atHeight: bottom adjustForQuit: NO];
+        if (eta)
+            bottom += [downloadBadge size].height + BETWEEN_PADDING;
+    }
+    if (eta)
+        [self badge: [NSImage imageNamed: @"DownloadBadge"] string: [self secondsToTimeString:remainingTime]
+           atHeight: bottom adjustForQuit: NO];
 }
 
 @end

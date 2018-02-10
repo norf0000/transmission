@@ -45,4 +45,6 @@
 
 - (NSArray *) betterComponentsSeparatedByCharactersInSet: (NSCharacterSet *) separators; //like componentsSeparatedByCharactersInSet:, but excludes blank values
 
++ (NSString *) timeStringForBadge: (uint64_t) seconds;
+
 @end
