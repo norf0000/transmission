@@ -1637,6 +1637,16 @@ bool trashDataFile(const char * filename, tr_error ** error)
     return location ? [NSURL fileURLWithPath: location] : nil;
 }
 
+- (BOOL) isSequentialOrder
+{
+    return fStat->isSequentialOrder;
+}
+
+- (void) setSequentialOrder: (BOOL) value
+{
+    tr_torrentSetSequentialOrder(fHandle, value);
+}
+
 @end
 
 @implementation Torrent (Private)

@@ -254,4 +254,7 @@ typedef enum {
 
 - (tr_torrent *) torrentStruct;
 
+- (BOOL) isSequentialOrder;
+- (void) setSequentialOrder: (BOOL) value;
+
 @end

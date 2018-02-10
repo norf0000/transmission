@@ -40,6 +40,7 @@
     IBOutlet NSTextField * fTransferBandwidthSectionLabel, * fPrioritySectionLabel, * fPriorityLabel;
     IBOutlet NSTextField * fSeedingLimitsSectionLabel, * fRatioLabel, * fInactivityLabel;
     IBOutlet NSTextField * fAdvancedSectionLabel, * fMaxConnectionsLabel;
+    IBOutlet NSButton *fSequentialOrder;
 
     NSString * fInitialString;
 }
@@ -63,5 +64,7 @@
 - (IBAction) setPriority: (id) sender;
 
 - (IBAction) setPeersConnectLimit: (id) sender;
+
+- (IBAction) setSequentialOrder: (id)sender;
 
 @end

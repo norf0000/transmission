@@ -265,6 +265,13 @@
         [fPeersConnectField setIntValue: maxPeers];
     else
         [fPeersConnectField setStringValue: @""];
+
+    //set sequentialOrder
+    enumerator = [fTorrents objectEnumerator];
+    while (torrent = [enumerator nextObject])
+    {
+        [fSequentialOrder setState: [torrent isSequentialOrder] ? NSOnState : NSOffState];
+    }
 }
 
 - (void) setUseSpeedLimit: (id) sender
@@ -455,6 +462,23 @@
         [torrent setMaxPeerConnect: limit];
 
     [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateOptionsNotification" object: self];
+}
+
+- (void) setSequentialOrder: (id) sender {
+    [self downloadTorrentsSequentially: fTorrents];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateOptionsNotification" object: self];
+}
+
+- (void) downloadTorrentsSequentially: (NSArray *) torrents
+{
+    BOOL hasSequentialOrder = NO;
+    for (Torrent * torrent in torrents)
+        if ([torrent isSequentialOrder])
+            hasSequentialOrder = YES;
+    
+    for (Torrent * torrent in torrents)
+        [torrent setSequentialOrder:!hasSequentialOrder];
 }
 
 - (BOOL) control: (NSControl *) control textShouldBeginEditing: (NSText *) fieldEditor
