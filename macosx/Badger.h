@@ -39,6 +39,5 @@
 - (void) removeTorrent: (Torrent *) torrent;
 - (void) clearCompleted;
 - (void) setQuitting;
-- (void) updateBadgeWithRemainingTime: (NSArray*) torrents;
 
 @end

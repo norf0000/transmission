@@ -219,6 +219,26 @@
     return components;
 }
 
++ (NSString *) timeStringForBadge: (uint64_t) seconds
+{
+    NSMutableArray * timeArray = [NSMutableArray arrayWithCapacity: 3u];
+    NSUInteger remaining = seconds; //causes problems for some users when it's a uint64_t
+    
+    if (seconds >= (60 * 60))
+    {
+        [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining / (60 * 60)]];
+        remaining %= (60 * 60);
+    }
+    if (seconds >= 60)
+    {
+        [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining / 60]];
+        remaining %= 60;
+    }
+    [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining]];
+    
+    return [timeArray componentsJoinedByString: @":"];
+}
+
 @end
 
 @implementation NSString (Private)
@@ -283,26 +303,6 @@
         return [NSString localizedStringWithFormat: @"%.1f %@", speed, mb];
     else //insane speeds
         return [NSString localizedStringWithFormat: @"%.2f %@", (speed / 1000.0), gb];
-}
-
-+ (NSString *) timeStringForBadge: (uint64_t) seconds
-{
-    NSMutableArray * timeArray = [NSMutableArray arrayWithCapacity: 3u];
-    NSUInteger remaining = seconds; //causes problems for some users when it's a uint64_t
-    
-    if (seconds >= (60 * 60))
-    {
-        [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining / (60 * 60)]];
-        remaining %= (60 * 60);
-    }
-    if (seconds >= 60)
-    {
-        [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining / 60]];
-        remaining %= 60;
-    }
-    [timeArray addObject: [NSString stringWithFormat: @"%lu", remaining]];
-    
-    return [timeArray componentsJoinedByString: @":"];
 }
 
 @end
