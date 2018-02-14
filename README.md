@@ -21,3 +21,10 @@ Alternatively you can enable it by:
 The progress bar of the selected torrent will turn to orange.
 
 ![Progress bar](Screenshots/Progress_bar.png)
+
+## How to disable the estimated download time badge on macOS:
+1. Go to **Preferences**.
+2. Uncheck the **Estimated download time** checkbox at the **Badge Dock icon with** section.
+
+![Estimated download time badge](Screenshots/Estimated_download_time_badge_check_box.png)
+

@@ -49,9 +49,11 @@
                                     ? downloadRate : 0.0;
     const CGFloat displayUlRate = [[NSUserDefaults standardUserDefaults] boolForKey: @"BadgeUploadRate"]
                                     ? uploadRate : 0.0;
+    const CGFloat displayETA = [[NSUserDefaults standardUserDefaults] boolForKey: @"BadgeETA"]
+    ? remainingTime : TR_ETA_UNKNOWN;
 
     //only update if the badged values change
-    if ([(BadgeView *)[[NSApp dockTile] contentView] setRatesWithDownload: displayDlRate upload: displayUlRate] | [(BadgeView *)[[NSApp dockTile] contentView] setRemainingTime: remainingTime])
+    if ([(BadgeView *)[[NSApp dockTile] contentView] setRatesWithDownload: displayDlRate upload: displayUlRate] | [(BadgeView *)[[NSApp dockTile] contentView] setRemainingTime: displayETA])
         [[NSApp dockTile] display];
 }
 
