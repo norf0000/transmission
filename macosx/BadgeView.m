@@ -78,21 +78,17 @@
 {
     NSString * idleString = @"";
     
-    if ([NSApp isOnYosemiteOrBetter]) {
-        static NSDateComponentsFormatter *formatter;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            formatter = [NSDateComponentsFormatter new];
-            formatter.unitsStyle = NSDateComponentsFormatterUnitsStyleAbbreviated;
-            formatter.maximumUnitCount = 2;
-            formatter.collapsesLargestUnit = YES;
-        });
-        
-        idleString = [formatter stringFromTimeInterval: seconds];
-    } else {
-        idleString = [NSString timeString: remainingTime includesTimeRemainingPhrase: NO showSeconds: YES maxFields: 2];
-    }
-    
+    static NSDateComponentsFormatter *formatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [NSDateComponentsFormatter new];
+        formatter.unitsStyle = NSDateComponentsFormatterUnitsStyleAbbreviated;
+        formatter.maximumUnitCount = 2;
+        formatter.collapsesLargestUnit = YES;
+    });
+
+    idleString = [formatter stringFromTimeInterval: seconds];
+
     return idleString;
 }
 
